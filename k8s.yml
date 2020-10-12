@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tools
+  namespace: default
+
+spec:
+  ports:
+    - protocol: TCP
+      name: web
+      port: 5000
+  selector:
+    app: tools
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: tools
+  labels:
+    app: tools
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tools
+  template:
+    metadata:
+      labels:
+        app: tools
+    spec:
+      containers:
+        - name: tools
+          image: quay.io/wasilak/tools
+          ports:
+            - name: web
+              containerPort: 5000
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: tools
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`tools.k8s.local`)
+    kind: Rule
+    services:
+    - name: tools
+      port: 5000
