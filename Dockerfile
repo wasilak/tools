@@ -1,9 +1,10 @@
-FROM --platform=$TARGETPLATFORM python:3-slim
+# FROM --platform=$TARGETPLATFORM python:3-slim
+FROM python:3-slim
 
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
+# ARG TARGETPLATFORM
+# ARG BUILDPLATFORM
 
-RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
+# RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
 
 # RUN pip install -U wheel
 
