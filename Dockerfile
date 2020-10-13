@@ -24,6 +24,6 @@ ENV SECRET_KEY=cnfg8237hc38aadsadaigochh98cy^TR^&%R&T*&G
 
 ENV SESSION_COOKIE_NAME=session-fastapi-tools
 
-ENTRYPOINT ["uvicorn", "main:app", "--host=0.0.0.0", "--port=5000"]
+ENTRYPOINT ["uvicorn", "main:app", "--host=0.0.0.0", "--port=5000", "--proxy-headers"]
 
 CMD ["--reload", "--log-level=info"]
