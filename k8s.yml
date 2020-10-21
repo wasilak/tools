@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
         - name: tools
-          image: quay.io/wasilak/tools:0.2-arm64
+          image: quay.io/wasilak/tools:0.3-arm64
           ports:
             - name: web
               containerPort: 5000
