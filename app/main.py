@@ -11,6 +11,8 @@ from fastapi.responses import HTMLResponse
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import RedirectResponse
+# import hcl2 as hcl
+import hcl
 
 app = FastAPI()
 
@@ -65,6 +67,10 @@ def encode_yaml(input):
     return output_str
 
 
+def decode_hcl(input):
+    return hcl.loads(input)
+
+
 @app.post("/api/converter")
 async def api_converter(request: Request, input: str = Form(...), from_lang: str = Form(...), to_lang: str = Form(...)):
     request.session["converter_error"] = ""
@@ -80,11 +86,14 @@ async def api_converter(request: Request, input: str = Form(...), from_lang: str
         if from_lang == "json":
             input_parsed = decode_json(input)
 
+        if from_lang == "yaml":
+            input_parsed = decode_yaml(input)
+
         if from_lang == "toml":
             input_parsed = decode_toml(input)
 
-        if from_lang == "yaml":
-            input_parsed = decode_yaml(input)
+        if from_lang == "hcl":
+            input_parsed = decode_hcl(input)
 
         if to_lang == "json":
             output_parsed = encode_json(input_parsed)

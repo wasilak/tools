@@ -26,7 +26,7 @@
                                         </option>
                                         <option {% if from_lang == "toml" %}selected{% endif %} value="toml">toml
                                         </option>
-                                        <option {% if from_lang == "ini" %}selected{% endif %} value="toml">ini</option>
+                                        <option {% if from_lang == "hcl" %}selected{% endif %} value="hcl">hcl</option>
                                     </select>
                                 </div>
                             </div>
@@ -38,7 +38,6 @@
                                     <option {% if to_lang == "json" %}selected{% endif %} value="json">json</option>
                                     <option {% if to_lang == "yaml" %}selected{% endif %} value="yaml">yaml</option>
                                     <option {% if to_lang == "toml" %}selected{% endif %} value="toml">toml</option>
-                                    <option {% if to_lang == "ini" %}selected{% endif %} value="toml">ini</option>
                                 </select>
                             </div>
                         </div>
@@ -89,6 +88,8 @@
     </script>
     <script>
         $(document).ready(function () {
+            
+
             $('#inputForm').on('change keyup keydown paste cut', 'textarea', function () {
                 $(this).height(0).height(this.scrollHeight);
             }).find('textarea').change();
