@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io"
 	"io/fs"
+	"strings"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/prometheus"
@@ -62,7 +63,11 @@ func main() {
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
-	e.Use(middleware.Gzip())
+	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Skipper: func(c echo.Context) bool {
+			return strings.Contains(c.Path(), "metrics")
+		},
+	}))
 
 	e.HideBanner = true
 
