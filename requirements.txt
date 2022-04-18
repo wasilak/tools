@@ -1,5 +1,0 @@
-fastapi[all]
-ruamel.yaml
-toml
-# python-hcl2
-pyhcl

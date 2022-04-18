@@ -1,29 +1,12 @@
-# FROM --platform=$TARGETPLATFORM python:3-slim
-FROM python:3-slim
+FROM quay.io/wasilak/golang:1.18-alpine as builder
 
-# ARG TARGETPLATFORM
-# ARG BUILDPLATFORM
-
-# RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
-
-# RUN pip install -U wheel
-
-RUN apt-get update && apt install build-essential -y
-
-COPY ./requirements.txt /requirements.txt
-
-RUN pip install -r requirements.txt
-
-COPY ./app /app/
-
+ADD ./app /app
 WORKDIR /app
+RUN mkdir -p ./dist
+RUN go build -o ./dist/tools
 
-EXPOSE 5000
+FROM quay.io/wasilak/alpine:3
 
-ENV SECRET_KEY=cnfg8237hc38aadsadaigochh98cy^TR^&%R&T*&G
+COPY --from=builder /app/dist/tools /tools
 
-ENV SESSION_COOKIE_NAME=session-fastapi-tools
-
-ENTRYPOINT ["uvicorn", "main:app", "--host=0.0.0.0", "--port=5000", "--proxy-headers", "--forwarded-allow-ips=*"]
-
-CMD ["--reload", "--log-level=info"]
+ENTRYPOINT ["/tools", "--listen=0.0.0.0:3000"]
