@@ -90,9 +90,13 @@ func main() {
 	p.Use(e)
 
 	e.GET("/", libs.MainRoute)
-	e.GET("/converter", libs.ConverterRoute)
 	e.GET("/health", libs.HealthRoute)
+	e.GET("/converter", libs.ConverterRoute)
 	e.POST("/api/converter", libs.ApiConverterRoute)
+	e.GET("/base64", libs.Base64Route)
+	e.POST("/api/base64", libs.Base64ApiRoute)
+	e.GET("/htmlencode", libs.HtmlEncodeRoute)
+	e.POST("/api/htmlencode", libs.HtmlEncodeApiRoute)
 
 	e.Logger.Fatal(e.Start(viper.GetString("listen")))
 }

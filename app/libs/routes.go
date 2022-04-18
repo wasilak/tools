@@ -9,6 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 	toml "github.com/pelletier/go-toml"
 	"net/http"
+	"net/url"
+	b64 "encoding/base64"
 )
 
 func getSession(c echo.Context) *sessions.Session {
@@ -108,4 +110,70 @@ func HealthRoute(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, map[string]interface{}{
 		"status": "OK",
 	}, "  ")
+}
+
+func Base64Route(c echo.Context) error {
+	sess := getSession(c)
+
+	return c.Render(http.StatusOK, "base64", map[string]interface{}{
+		"operation":     sess.Values["operation"],
+		"input":     sess.Values["input"],
+		"output":    sess.Values["output"],
+	})
+}
+
+func Base64ApiRoute(c echo.Context) error {
+	sess := getSession(c)
+
+	sess.Values["operation"] = c.FormValue("operation")
+	sess.Values["input"] = c.FormValue("input")
+	sess.Values["output"] = ""
+
+	if c.FormValue("operation") == "encode" {
+		stringOutput := b64.URLEncoding.EncodeToString([]byte(c.FormValue("input")))
+		sess.Values["output"] = fmt.Sprintf("%s", stringOutput)
+	}
+
+	if c.FormValue("operation") == "decode" {
+		stringOutput, _ := b64.URLEncoding.DecodeString(c.FormValue("input"))
+		sess.Values["output"] = fmt.Sprintf("%s", stringOutput)
+	}
+
+	sess.Save(c.Request(), c.Response())
+
+	c.Redirect(http.StatusFound, "/base64")
+	return nil
+}
+
+func HtmlEncodeRoute(c echo.Context) error {
+	sess := getSession(c)
+
+	return c.Render(http.StatusOK, "htmlencode", map[string]interface{}{
+		"operation":     sess.Values["htmlencode_operation"],
+		"input":     sess.Values["htmlencode_input"],
+		"output":    sess.Values["htmlencode_output"],
+	})
+}
+
+func HtmlEncodeApiRoute(c echo.Context) error {
+	sess := getSession(c)
+
+	sess.Values["htmlencode_operation"] = c.FormValue("operation")
+	sess.Values["htmlencode_input"] = c.FormValue("input")
+	sess.Values["htmlencode_output"] = ""
+
+	if c.FormValue("operation") == "encode" {
+		stringOutput := url.PathEscape(c.FormValue("input"))
+		sess.Values["htmlencode_output"] = fmt.Sprintf("%s", stringOutput)
+	}
+
+	if c.FormValue("operation") == "decode" {
+		stringOutput, _ := url.QueryUnescape(c.FormValue("input"))
+		sess.Values["htmlencode_output"] = fmt.Sprintf("%s", stringOutput)
+	}
+
+	sess.Save(c.Request(), c.Response())
+
+	c.Redirect(http.StatusFound, "/htmlencode")
+	return nil
 }
