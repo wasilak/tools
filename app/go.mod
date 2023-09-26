@@ -1,6 +1,6 @@
 module github.com/wasilak/tools
 
-go 1.18
+go 1.21
 
 require (
 	github.com/ghodss/yaml v1.0.0
