@@ -17,7 +17,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 )
 
-var tracer = otel.Tracer("go-hello-world")
+var tracer = otel.Tracer("tools")
 
 func getSession(c echo.Context) *sessions.Session {
 	sess, _ := session.Get("session", c)
@@ -62,6 +62,10 @@ func ConverterRoute(c echo.Context) error {
 	}
 
 	span.SetAttributes(attribute.String("from_lang", sessionValues["from_lang"]))
+	span.SetAttributes(attribute.String("to_lang", sessionValues["to_lang"]))
+	span.SetAttributes(attribute.String("input", sessionValues["input"]))
+	span.SetAttributes(attribute.String("output", sessionValues["output"]))
+
 	span.End()
 	return c.Render(http.StatusOK, "converter", sessionValues)
 }
@@ -77,6 +81,18 @@ func ApiConverterRoute(c echo.Context) error {
 	var input map[string]interface{}
 	sess.Values["input"] = c.FormValue("input")
 	sess.Values["output"] = ""
+
+	sessionValues := map[string]string{
+		"from_lang": handleSessParam(sess.Values["from_lang"]),
+		"to_lang":   handleSessParam(sess.Values["to_lang"]),
+		"input":     handleSessParam(sess.Values["input"]),
+		"output":    handleSessParam(sess.Values["output"]),
+	}
+
+	span.SetAttributes(attribute.String("from_lang", sessionValues["from_lang"]))
+	span.SetAttributes(attribute.String("to_lang", sessionValues["to_lang"]))
+	span.SetAttributes(attribute.String("input", sessionValues["input"]))
+	span.SetAttributes(attribute.String("output", sessionValues["output"]))
 
 	ctx, spanFrom := tracer.Start(ctx, fmt.Sprintf("from_lang_%s", c.FormValue("from_lang")))
 	if c.FormValue("from_lang") == "json" {
