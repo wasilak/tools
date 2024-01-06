@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"flag"
 	"html/template"
 	"io"
 	"io/fs"
+	"log/slog"
+	"os"
 	"strings"
 
 	"github.com/gorilla/sessions"
@@ -17,9 +20,13 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/wasilak/tools/libs"
-)
 
-var err error
+	slogecho "github.com/samber/slog-echo"
+	"github.com/wasilak/loggergo"
+
+	otelgotracer "github.com/wasilak/otelgo/tracing"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
+)
 
 //go:embed views
 var views embed.FS
@@ -43,8 +50,10 @@ func getEmbededViews() fs.FS {
 
 func main() {
 	// using standard library "flag" package
-	flag.Bool("verbose", false, "verbose")
 	flag.String("listen", "127.0.0.1:3000", "listen address")
+	flag.String("log-level", "info", "Log level")
+	flag.String("log-format", "json", "Log format")
+	flag.Bool("otelEnabled", false, "OpenTelemetry traces enabled")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
@@ -53,13 +62,37 @@ func main() {
 	viper.SetEnvPrefix("tools")
 	viper.AutomaticEnv()
 
-	log.Debug(viper.AllSettings())
+	log.Info(viper.AllSettings())
 
-	if viper.GetBool("debug") {
-		log.SetLevel(log.DEBUG)
+	ctx := context.Background()
+
+	if viper.GetBool("otelEnabled") {
+		otelGoTracingConfig := otelgotracer.OtelGoTracingConfig{
+			HostMetricsEnabled: false,
+		}
+		err := otelgotracer.InitTracer(ctx, otelGoTracingConfig)
+		if err != nil {
+			slog.ErrorContext(ctx, err.Error())
+			os.Exit(1)
+		}
+	}
+
+	loggerConfig := loggergo.LoggerGoConfig{
+		Level:  viper.GetString("log-level"),
+		Format: viper.GetString("log-format"),
+	}
+
+	_, err := loggergo.LoggerInit(loggerConfig)
+	if err != nil {
+		slog.ErrorContext(ctx, err.Error())
+		os.Exit(1)
 	}
 
 	e := echo.New()
+
+	if viper.GetBool("otelEnabled") {
+		e.Use(otelecho.Middleware(os.Getenv("OTEL_SERVICE_NAME")))
+	}
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
@@ -71,11 +104,10 @@ func main() {
 
 	e.HideBanner = true
 
-	if viper.GetBool("verbose") {
+	if strings.ToLower(viper.GetString("log-level")) == strings.ToLower("debug") {
 		e.Logger.SetLevel(log.DEBUG)
+		e.Debug = true
 	}
-
-	e.Debug = viper.GetBool("debug")
 
 	t := &Template{
 		templates: template.Must(template.ParseFS(getEmbededViews(), "*.html")),
@@ -83,7 +115,8 @@ func main() {
 
 	e.Renderer = t
 
-	e.Use(middleware.Logger())
+	e.Use(slogecho.New(slog.Default()))
+	e.Use(middleware.Recover())
 
 	// Enable metrics middleware
 	p := prometheus.NewPrometheus("echo", nil)
