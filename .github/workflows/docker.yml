@@ -21,12 +21,6 @@ jobs:
       IMAGE_NAME: ${{ github.repository }}
 
     steps:
-      - name: Install dependencies
-        id: install_deps
-        shell: bash
-        run: |
-          apt install -u curl gpg
-
       - uses: docker-practice/actions-setup-docker@master
         timeout-minutes: 12
 
