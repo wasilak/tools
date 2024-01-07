@@ -21,6 +21,9 @@ jobs:
       IMAGE_NAME: ${{ github.repository }}
 
     steps:
+      - uses: docker-practice/actions-setup-docker@master
+        timeout-minutes: 12
+
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
