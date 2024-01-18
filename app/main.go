@@ -62,7 +62,7 @@ func main() {
 	viper.SetEnvPrefix("tools")
 	viper.AutomaticEnv()
 
-	log.Info(viper.AllSettings())
+	slog.Info("AllSettings", "value", viper.AllSettings())
 
 	ctx := context.Background()
 
@@ -70,7 +70,7 @@ func main() {
 		otelGoTracingConfig := otelgotracer.OtelGoTracingConfig{
 			HostMetricsEnabled: false,
 		}
-		err := otelgotracer.InitTracer(ctx, otelGoTracingConfig)
+		_, _, err := otelgotracer.Init(ctx, otelGoTracingConfig)
 		if err != nil {
 			slog.ErrorContext(ctx, err.Error())
 			os.Exit(1)
