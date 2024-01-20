@@ -7,6 +7,7 @@ toolchain go1.21.5
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/sessions v1.2.2
+	github.com/grafana/pyroscope-go v1.1.0
 	github.com/labstack/echo-contrib v0.15.0
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/labstack/gommon v0.4.2
@@ -16,6 +17,7 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/wasilak/loggergo v1.0.5
 	github.com/wasilak/otelgo v1.0.8
+	github.com/wasilak/profilego v0.0.1
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.46.1
 	go.opentelemetry.io/otel v1.22.0
 )
@@ -34,8 +36,10 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
+	github.com/grafana/pyroscope-go/godeltaprof v0.1.6 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/klauspost/compress v1.17.3 // indirect
 	github.com/lufia/plan9stats v0.0.0-20231016141302-07b5767bb0ed // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

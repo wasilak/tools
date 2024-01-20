@@ -25,6 +25,7 @@ import (
 	"github.com/wasilak/loggergo"
 
 	otelgotracer "github.com/wasilak/otelgo/tracing"
+	"github.com/wasilak/profilego"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 )
 
@@ -51,9 +52,12 @@ func getEmbededViews() fs.FS {
 func main() {
 	// using standard library "flag" package
 	flag.String("listen", "127.0.0.1:3000", "listen address")
-	flag.String("log-level", "info", "Log level")
-	flag.String("log-format", "json", "Log format")
+	flag.String("logLevel", "info", "Log level")
+	flag.String("logFormat", "json", "Log format")
 	flag.Bool("otelEnabled", false, "OpenTelemetry traces enabled")
+	flag.Bool("profilingEnabled", false, "Profiling enabled")
+	flag.String("profilerApplicationName", "tools", "Profiler ApplicationName")
+	flag.String("profilerServerAddress", "", "Profiler ServerAddress")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
@@ -62,7 +66,7 @@ func main() {
 	viper.SetEnvPrefix("tools")
 	viper.AutomaticEnv()
 
-	slog.Info("AllSettings", "value", viper.AllSettings())
+	slog.Debug("AllSettings", "value", viper.AllSettings())
 
 	ctx := context.Background()
 
@@ -86,6 +90,23 @@ func main() {
 	if err != nil {
 		slog.ErrorContext(ctx, err.Error())
 		os.Exit(1)
+	}
+
+	if viper.GetBool("profilingEnabled") {
+		ProfileGoConfig := profilego.ProfileGoConfig{
+			ApplicationName: viper.GetString("profilerApplicationName"),
+			ServerAddress:   viper.GetString("profilerServerAddress"),
+			Tags: map[string]string{
+				"hostname": os.Getenv("HOSTNAME"),
+				"test":     "test_value",
+			},
+		}
+
+		err := profilego.Init(ProfileGoConfig)
+		if err != nil {
+			slog.ErrorContext(ctx, err.Error())
+			os.Exit(1)
+		}
 	}
 
 	e := echo.New()

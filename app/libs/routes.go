@@ -1,6 +1,7 @@
 package libs
 
 import (
+	"context"
 	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/ghodss/yaml"
 	"github.com/gorilla/sessions"
+	"github.com/grafana/pyroscope-go"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	toml "github.com/pelletier/go-toml"
@@ -78,7 +80,6 @@ func ApiConverterRoute(c echo.Context) error {
 	sess.Values["from_lang"] = c.FormValue("from_lang")
 	sess.Values["to_lang"] = c.FormValue("to_lang")
 
-	var input map[string]interface{}
 	sess.Values["input"] = c.FormValue("input")
 	sess.Values["output"] = ""
 
@@ -94,69 +95,9 @@ func ApiConverterRoute(c echo.Context) error {
 	span.SetAttributes(attribute.String("input", sessionValues["input"]))
 	span.SetAttributes(attribute.String("output", sessionValues["output"]))
 
-	ctx, spanFrom := tracer.Start(ctx, fmt.Sprintf("from_lang_%s", c.FormValue("from_lang")))
-	if c.FormValue("from_lang") == "json" {
-		err := json.Unmarshal([]byte(c.FormValue("input")), &input)
-		if err != nil {
-			fmt.Println(err)
-			span.SetStatus(codes.Error, fmt.Sprintf("from_lang_%s", c.FormValue("from_lang")))
-			span.RecordError(err)
-		}
-	}
-
-	if c.FormValue("from_lang") == "yaml" {
-		err := yaml.Unmarshal([]byte(c.FormValue("input")), &input)
-		if err != nil {
-			fmt.Println(err)
-			span.SetStatus(codes.Error, fmt.Sprintf("from_lang_%s", c.FormValue("from_lang")))
-			span.RecordError(err)
-		}
-	}
-
-	if c.FormValue("from_lang") == "toml" {
-		err := toml.Unmarshal([]byte(c.FormValue("input")), &input)
-		if err != nil {
-			fmt.Println(err)
-			span.SetStatus(codes.Error, fmt.Sprintf("from_lang_%s", c.FormValue("from_lang")))
-			span.RecordError(err)
-		}
-	}
-	spanFrom.End()
-
-	_, spanTo := tracer.Start(ctx, fmt.Sprintf("to_lang_%s", c.FormValue("to_lang")))
-	if c.FormValue("to_lang") == "json" {
-		stringOutput, err := json.MarshalIndent(input, "", "    ")
-		if err != nil {
-			fmt.Println(err)
-			span.SetStatus(codes.Error, fmt.Sprintf("to_lang_%s", c.FormValue("to_lang")))
-			span.RecordError(err)
-		}
-
-		sess.Values["output"] = string(stringOutput)
-	}
-
-	if c.FormValue("to_lang") == "yaml" {
-		stringOutput, err := yaml.Marshal(input)
-		if err != nil {
-			fmt.Println(err)
-			span.SetStatus(codes.Error, fmt.Sprintf("to_lang_%s", c.FormValue("to_lang")))
-			span.RecordError(err)
-		}
-
-		sess.Values["output"] = string(stringOutput)
-	}
-
-	if c.FormValue("to_lang") == "toml" {
-		stringOutput, err := toml.Marshal(input)
-		if err != nil {
-			fmt.Println(err)
-			span.SetStatus(codes.Error, fmt.Sprintf("to_lang_%s", c.FormValue("to_lang")))
-			span.RecordError(err)
-		}
-
-		sess.Values["output"] = string(stringOutput)
-	}
-	spanTo.End()
+	pyroscope.TagWrapper(ctx, pyroscope.Labels("route", "ApiConverterRoute"), func(ctx context.Context) {
+		sess.Values["output"] = transform(ctx, c.FormValue("input"), c.FormValue("from_lang"), c.FormValue("to_lang"))
+	})
 
 	sess.Save(c.Request(), c.Response())
 
@@ -236,4 +177,71 @@ func HtmlEncodeApiRoute(c echo.Context) error {
 
 	c.Redirect(http.StatusFound, "/htmlencode")
 	return nil
+}
+
+func transform(ctx context.Context, input_value, from_lang, to_lang string) string {
+	var input map[string]interface{}
+
+	ctx, spanFrom := tracer.Start(ctx, fmt.Sprintf("from_lang_%s", from_lang))
+	if from_lang == "json" {
+		err := json.Unmarshal([]byte(input_value), &input)
+		if err != nil {
+			fmt.Println(err)
+			spanFrom.SetStatus(codes.Error, fmt.Sprintf("from_lang_%s", from_lang))
+			spanFrom.RecordError(err)
+		}
+	}
+
+	if from_lang == "yaml" {
+		err := yaml.Unmarshal([]byte(input_value), &input)
+		if err != nil {
+			fmt.Println(err)
+			spanFrom.SetStatus(codes.Error, fmt.Sprintf("from_lang_%s", from_lang))
+			spanFrom.RecordError(err)
+		}
+	}
+
+	if from_lang == "toml" {
+		err := toml.Unmarshal([]byte(input_value), &input)
+		if err != nil {
+			fmt.Println(err)
+			spanFrom.SetStatus(codes.Error, fmt.Sprintf("from_lang_%s", from_lang))
+			spanFrom.RecordError(err)
+		}
+	}
+	spanFrom.End()
+
+	var stringOutput []byte
+	var err error
+
+	_, spanTo := tracer.Start(ctx, fmt.Sprintf("to_lang_%s", to_lang))
+	if to_lang == "json" {
+		stringOutput, err = json.MarshalIndent(input, "", "    ")
+		if err != nil {
+			fmt.Println(err)
+			spanTo.SetStatus(codes.Error, fmt.Sprintf("to_lang_%s", to_lang))
+			spanTo.RecordError(err)
+		}
+	}
+
+	if to_lang == "yaml" {
+		stringOutput, err = yaml.Marshal(input)
+		if err != nil {
+			fmt.Println(err)
+			spanTo.SetStatus(codes.Error, fmt.Sprintf("to_lang_%s", to_lang))
+			spanTo.RecordError(err)
+		}
+	}
+
+	if to_lang == "toml" {
+		stringOutput, err = toml.Marshal(input)
+		if err != nil {
+			fmt.Println(err)
+			spanTo.SetStatus(codes.Error, fmt.Sprintf("to_lang_%s", to_lang))
+			spanTo.RecordError(err)
+		}
+	}
+	spanTo.End()
+
+	return string(stringOutput)
 }
