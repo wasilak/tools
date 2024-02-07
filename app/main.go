@@ -72,9 +72,10 @@ func main() {
 
 	if viper.GetBool("otelEnabled") {
 		otelGoTracingConfig := otelgotracer.OtelGoTracingConfig{
-			HostMetricsEnabled: false,
+			HostMetricsEnabled:    true,
+			RuntimeMetricsEnabled: true,
 		}
-		_, _, err := otelgotracer.Init(ctx, otelGoTracingConfig)
+		ctx, _, err := otelgotracer.Init(ctx, otelGoTracingConfig)
 		if err != nil {
 			slog.ErrorContext(ctx, err.Error())
 			os.Exit(1)

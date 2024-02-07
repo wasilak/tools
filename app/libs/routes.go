@@ -17,6 +17,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var tracer = otel.Tracer("tools")
@@ -43,15 +44,13 @@ func handleSessParam(param interface{}) string {
 }
 
 func MainRoute(c echo.Context) error {
-	_, span := tracer.Start(c.Request().Context(), "MainRoute")
-
 	var tempalateData interface{}
-	span.End()
 	return c.Render(http.StatusOK, "main", tempalateData)
 }
 
 func ConverterRoute(c echo.Context) error {
-	_, span := tracer.Start(c.Request().Context(), "ConverterRoute")
+	span := trace.SpanFromContext(c.Request().Context())
+
 	sess := getSession(c)
 
 	sess.Save(c.Request(), c.Response())
@@ -68,12 +67,11 @@ func ConverterRoute(c echo.Context) error {
 	span.SetAttributes(attribute.String("input", sessionValues["input"]))
 	span.SetAttributes(attribute.String("output", sessionValues["output"]))
 
-	span.End()
 	return c.Render(http.StatusOK, "converter", sessionValues)
 }
 
 func ApiConverterRoute(c echo.Context) error {
-	ctx, span := tracer.Start(c.Request().Context(), "ApiConverterRoute")
+	span := trace.SpanFromContext(c.Request().Context())
 
 	sess := getSession(c)
 
@@ -95,13 +93,11 @@ func ApiConverterRoute(c echo.Context) error {
 	span.SetAttributes(attribute.String("input", sessionValues["input"]))
 	span.SetAttributes(attribute.String("output", sessionValues["output"]))
 
-	pyroscope.TagWrapper(ctx, pyroscope.Labels("route", "ApiConverterRoute"), func(ctx context.Context) {
+	pyroscope.TagWrapper(c.Request().Context(), pyroscope.Labels("route", "ApiConverterRoute"), func(ctx context.Context) {
 		sess.Values["output"] = transform(ctx, c.FormValue("input"), c.FormValue("from_lang"), c.FormValue("to_lang"))
 	})
 
 	sess.Save(c.Request(), c.Response())
-
-	span.End()
 
 	c.Redirect(http.StatusFound, "/converter")
 	return nil
