@@ -14,6 +14,8 @@ jobs:
   quay:
     runs-on: ubuntu-latest
 
+    if: ${{ github.event_name != 'pull_request' }}
+
     env:
       # Use docker.io for Docker Hub if empty
       REGISTRY: quay.io
@@ -63,6 +65,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v5
         with:
+          build-args: |
+            VERSION=${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -70,6 +74,8 @@ jobs:
 
   ghcr:
     runs-on: ubuntu-latest
+
+    if: ${{ github.event_name != 'pull_request' }}
 
     env:
       # Use docker.io for Docker Hub if empty
@@ -94,7 +100,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v3
         with:
-          cosign-release: "v2.1.1"
+          cosign-release: "v2.2.4"
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
@@ -136,6 +142,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          build-args: |
+            VERSION=${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
