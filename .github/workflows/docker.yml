@@ -12,7 +12,7 @@ on:
 
 jobs:
   quay:
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set-tools
 
     env:
       # Use docker.io for Docker Hub if empty
@@ -69,7 +69,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   ghcr:
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set-tools
 
     env:
       # Use docker.io for Docker Hub if empty
