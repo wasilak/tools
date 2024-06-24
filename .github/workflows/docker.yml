@@ -50,7 +50,7 @@ jobs:
           # endpoint: unix:///var/run/docker.sock
           driver: kubernetes
           driver-opts:
-            default-load: true
+            - default-load=true
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
