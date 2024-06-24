@@ -47,7 +47,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          endpoint: /var/run/docker.sock
+          endpoint: unix:///var/run/docker.sock
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
