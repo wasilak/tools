@@ -33,6 +33,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: install deps
+        run: |
+          apt-get install -y curl
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
@@ -40,14 +44,6 @@ jobs:
         uses: sigstore/cosign-installer@v3
         with:
           cosign-release: "v2.2.4"
-
-      - name: list dirs
-        run: |
-          ls -lha /var/run
-          ls -lha /var/run/*
-          ls -lha /home/runner/_work
-          ls -lha /home/runner/_work/*
-          id runner
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
