@@ -41,16 +41,24 @@ jobs:
         with:
           cosign-release: "v2.2.4"
 
+      - name: list dirs
+        run: |
+          ls -lha /var/run
+          ls -lha /var/run/*
+          ls -lha /home/runner/_work
+          ls -lha /home/runner/_work/*
+          id runner
+
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          # endpoint: unix:///var/run/docker.sock
-          driver: kubernetes
-          driver-opts: |
-            default-load=true
+          endpoint: ${DOCKER_HOST}
+          # driver: kubernetes
+          # driver-opts: |
+          #   default-load=true
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
