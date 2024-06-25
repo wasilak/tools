@@ -46,11 +46,11 @@ jobs:
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          endpoint: unix:///var/run/docker/docker.sock
-          # driver: kubernetes
-          # driver-opts: |
-          #   default-load=true
+        # with:
+        #   endpoint: unix:///var/run/docker/docker.sock
+        #   # driver: kubernetes
+        #   # driver-opts: |
+        #   #   default-load=true
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
