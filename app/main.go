@@ -56,7 +56,6 @@ func main() {
 	flag.String("logFormat", "json", "Log format")
 	flag.Bool("otelEnabled", false, "OpenTelemetry traces enabled")
 	flag.Bool("profilingEnabled", false, "Profiling enabled")
-	flag.String("profilerApplicationName", "tools", "Profiler ApplicationName")
 	flag.String("profilerServerAddress", "", "Profiler ServerAddress")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
@@ -82,12 +81,18 @@ func main() {
 		}
 	}
 
-	loggerConfig := loggergo.LoggerGoConfig{
-		Level:  viper.GetString("log-level"),
-		Format: viper.GetString("log-format"),
+	loggerConfig := loggergo.Config{
+		Level:  loggergo.LogLevelFromString(viper.GetString("logLevel")),
+		Format: loggergo.LogFormatFromString(viper.GetString("logFormat")),
 	}
 
-	_, err := loggergo.LoggerInit(loggerConfig)
+	if viper.GetBool("otelEnabled") {
+		loggerConfig.OtelLoggerName = "github.com/wasilak/tools"
+		loggerConfig.OtelServiceName = libs.GetAppName()
+		loggerConfig.OtelTracingEnabled = true
+	}
+
+	_, err := loggergo.LoggerInit(ctx, loggerConfig)
 	if err != nil {
 		slog.ErrorContext(ctx, err.Error())
 		os.Exit(1)
@@ -95,7 +100,7 @@ func main() {
 
 	if viper.GetBool("profilingEnabled") {
 		ProfileGoConfig := profilego.ProfileGoConfig{
-			ApplicationName: viper.GetString("profilerApplicationName"),
+			ApplicationName: libs.GetAppName(),
 			ServerAddress:   viper.GetString("profilerServerAddress"),
 			Tags: map[string]string{
 				"hostname": os.Getenv("HOSTNAME"),
@@ -126,7 +131,7 @@ func main() {
 
 	e.HideBanner = true
 
-	if strings.ToLower(viper.GetString("log-level")) == strings.ToLower("debug") {
+	if strings.EqualFold(viper.GetString("logLevel"), "debug") {
 		e.Logger.SetLevel(log.DEBUG)
 		e.Debug = true
 	}
