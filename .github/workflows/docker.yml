@@ -12,7 +12,7 @@ on:
 
 jobs:
   ghcr:
-    runs-on: gha-runner-scale-set-tools
+    runs-on: ubuntu-latest
 
     if: ${{ github.event_name != 'pull_request' }}
 
@@ -32,11 +32,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: install curl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer

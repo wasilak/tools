@@ -99,7 +99,7 @@ func main() {
 	}
 
 	if viper.GetBool("profilingEnabled") {
-		ProfileGoConfig := profilego.ProfileGoConfig{
+		ProfileGoConfig := profilego.Config{
 			ApplicationName: libs.GetAppName(),
 			ServerAddress:   viper.GetString("profilerServerAddress"),
 			Tags: map[string]string{
