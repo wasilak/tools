@@ -1,6 +1,6 @@
 module github.com/wasilak/tools
 
-go 1.22.5
+go 1.22.1
 
 require (
 	github.com/ghodss/yaml v1.0.0
@@ -13,8 +13,8 @@ require (
 	github.com/samber/slog-echo v1.14.4
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
-	github.com/wasilak/loggergo v1.2.11
-	github.com/wasilak/otelgo v1.0.17
+	github.com/wasilak/loggergo v1.2.12
+	github.com/wasilak/otelgo v1.0.18
 	github.com/wasilak/profilego v1.0.7
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.53.0
 	go.opentelemetry.io/otel v1.28.0
