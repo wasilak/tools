@@ -5,7 +5,7 @@ WORKDIR /app
 RUN mkdir -p ./dist
 RUN go build -o ./dist/tools
 
-FROM quay.io/wasilak/alpine:3
+FROM quay.io/wasilak/debian:bookworm-slim
 
 COPY --from=builder /app/dist/tools /tools
 
