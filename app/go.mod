@@ -13,7 +13,7 @@ require (
 	github.com/samber/slog-echo v1.14.4
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
-	github.com/wasilak/loggergo v1.2.12
+	github.com/wasilak/loggergo v1.3.0
 	github.com/wasilak/otelgo v1.0.19
 	github.com/wasilak/profilego v1.0.7
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.53.0

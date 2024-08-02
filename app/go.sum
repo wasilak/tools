@@ -142,6 +142,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/wasilak/loggergo v1.2.12 h1:VW90NKv2bvF5AKPMotMs6xegyu/tb2hD7Z+gTQ8RgLo=
 github.com/wasilak/loggergo v1.2.12/go.mod h1:p7xlDAxliJku84TIKV+uCKOtYtzOEX8QT8G18caqe5A=
+github.com/wasilak/loggergo v1.3.0 h1:yPolb3/XBVsP6bHOsiJgLM1i4oTrts6Mgw+jWl10ndM=
+github.com/wasilak/loggergo v1.3.0/go.mod h1:7Lk9nc8XoKzPf0N2l/WbyaK+dS8Gr4ZqTbtcelim/P8=
 github.com/wasilak/otelgo v1.0.19 h1:p5yVacoZQodkzTrRqaAsMG7pjv+DmAnuylKWOLLEjl8=
 github.com/wasilak/otelgo v1.0.19/go.mod h1:UuXjo67rrc92ijHGfU9ut3MIos6gD1bC/k/5LqIyjmU=
 github.com/wasilak/profilego v1.0.7 h1:QoUwQ3Tr8/zubEO0rOpmulAORttM3YTXjZp1wA7njHc=
