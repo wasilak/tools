@@ -1,4 +1,4 @@
-FROM quay.io/wasilak/golang:1.22.5 AS builder
+FROM quay.io/wasilak/golang:1.23.1 AS builder
 
 ADD ./app /app
 WORKDIR /app
