@@ -1,10 +1,12 @@
 module github.com/wasilak/tools
 
-go 1.22.5
+go 1.23
+
+toolchain go1.23.1
 
 require (
 	github.com/ghodss/yaml v1.0.0
-	github.com/gorilla/sessions v1.3.0
+	github.com/gorilla/sessions v1.4.0
 	github.com/grafana/pyroscope-go v1.1.1
 	github.com/labstack/echo-contrib v0.17.1
 	github.com/labstack/echo/v4 v4.12.0
