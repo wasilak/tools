@@ -13,7 +13,7 @@ import (
 	"github.com/grafana/pyroscope-go"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	toml "github.com/pelletier/go-toml"
+	toml "github.com/pelletier/go-toml/v2"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
