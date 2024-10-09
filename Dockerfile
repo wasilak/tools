@@ -1,11 +1,11 @@
-FROM quay.io/wasilak/golang:1.23.1 AS builder
+FROM quay.io/wasilak/golang:1.23 AS builder
 
 ADD ./app /app
 WORKDIR /app
 RUN mkdir -p ./dist
 RUN go build -o ./dist/tools
 
-FROM quay.io/wasilak/debian:bookworm-slim
+FROM scratch
 
 COPY --from=builder /app/dist/tools /tools
 
