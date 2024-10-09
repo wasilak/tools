@@ -52,11 +52,11 @@ func getEmbededViews() fs.FS {
 func main() {
 	// using standard library "flag" package
 	flag.String("listen", "127.0.0.1:3000", "listen address")
-	flag.String("logLevel", "info", "Log level")
-	flag.String("logFormat", "json", "Log format")
-	flag.Bool("otelEnabled", false, "OpenTelemetry traces enabled")
-	flag.Bool("profilingEnabled", false, "Profiling enabled")
-	flag.String("profilerServerAddress", "", "Profiler ServerAddress")
+	flag.String("log.level", "info", "Log level")
+	flag.String("log.format", "json", "Log format")
+	flag.Bool("otel.enabled", false, "OpenTelemetry traces enabled")
+	flag.Bool("profiling.enabled", false, "Profiling enabled")
+	flag.String("profiling.ServerAddress", "", "Profiler ServerAddress")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
@@ -69,7 +69,7 @@ func main() {
 
 	ctx := context.Background()
 
-	if viper.GetBool("otelEnabled") {
+	if viper.GetBool("otel.enabled") {
 		otelGoTracingConfig := otelgotracer.Config{
 			HostMetricsEnabled:    true,
 			RuntimeMetricsEnabled: true,
@@ -82,11 +82,11 @@ func main() {
 	}
 
 	loggerConfig := loggergo.Config{
-		Level:  loggergo.LogLevelFromString(viper.GetString("logLevel")),
-		Format: loggergo.LogFormatFromString(viper.GetString("logFormat")),
+		Level:  loggergo.LogLevelFromString(viper.GetString("log.level")),
+		Format: loggergo.LogFormatFromString(viper.GetString("log.format")),
 	}
 
-	if viper.GetBool("otelEnabled") {
+	if viper.GetBool("otel.enabled") {
 		loggerConfig.OtelLoggerName = "github.com/wasilak/tools"
 		loggerConfig.OtelServiceName = libs.GetAppName()
 		loggerConfig.OtelTracingEnabled = true
@@ -98,10 +98,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	if viper.GetBool("profilingEnabled") {
+	if viper.GetBool("profiling.enabled") {
 		ProfileGoConfig := profilego.Config{
 			ApplicationName: libs.GetAppName(),
-			ServerAddress:   viper.GetString("profilerServerAddress"),
+			ServerAddress:   viper.GetString("profiling.ServerAddress"),
 			Tags: map[string]string{
 				"hostname": os.Getenv("HOSTNAME"),
 				"test":     "test_value",
@@ -117,7 +117,7 @@ func main() {
 
 	e := echo.New()
 
-	if viper.GetBool("otelEnabled") {
+	if viper.GetBool("otel.enabled") {
 		e.Use(otelecho.Middleware(os.Getenv("OTEL_SERVICE_NAME")))
 	}
 
@@ -131,7 +131,7 @@ func main() {
 
 	e.HideBanner = true
 
-	if strings.EqualFold(viper.GetString("logLevel"), "debug") {
+	if strings.EqualFold(viper.GetString("log.level"), "debug") {
 		e.Logger.SetLevel(log.DEBUG)
 		e.Debug = true
 	}
