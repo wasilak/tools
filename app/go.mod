@@ -16,9 +16,9 @@ require (
 	github.com/wasilak/loggergo v1.7.2
 	github.com/wasilak/otelgo v1.2.2
 	github.com/wasilak/profilego v1.0.8
-	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.57.0
-	go.opentelemetry.io/otel v1.32.0
-	go.opentelemetry.io/otel/trace v1.32.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.58.0
+	go.opentelemetry.io/otel v1.33.0
+	go.opentelemetry.io/otel/trace v1.33.0
 )
 
 require (
@@ -68,6 +68,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	gitlab.com/greyxor/slogor v1.5.2 // indirect
+	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/bridges/otelslog v0.7.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/host v0.57.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.57.0 // indirect
@@ -80,7 +81,7 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.32.0 // indirect
 	go.opentelemetry.io/otel/exporters/stdout/stdoutlog v0.8.0 // indirect
 	go.opentelemetry.io/otel/log v0.8.0 // indirect
-	go.opentelemetry.io/otel/metric v1.32.0 // indirect
+	go.opentelemetry.io/otel/metric v1.33.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.32.0 // indirect
 	go.opentelemetry.io/otel/sdk/log v0.8.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.32.0 // indirect
