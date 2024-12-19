@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/grafana/pyroscope-go v1.2.0
 	github.com/labstack/echo-contrib v0.17.1
-	github.com/labstack/echo/v4 v4.13.2
+	github.com/labstack/echo/v4 v4.13.3
 	github.com/labstack/gommon v0.4.2
 	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/samber/slog-echo v1.14.7
@@ -89,7 +89,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/exp v0.0.0-20241004190924-225e2abe05e6 // indirect
-	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
