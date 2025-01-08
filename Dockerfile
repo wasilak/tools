@@ -9,4 +9,6 @@ FROM scratch
 
 COPY --from=builder /app/dist/tools .
 
+ENV USER=root
+
 ENTRYPOINT ["/tools", "--listen=0.0.0.0:3000"]
