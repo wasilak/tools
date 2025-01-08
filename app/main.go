@@ -23,6 +23,8 @@ import (
 
 	slogecho "github.com/samber/slog-echo"
 	"github.com/wasilak/loggergo"
+	loggergoLib "github.com/wasilak/loggergo/lib"
+	loggergoTypes "github.com/wasilak/loggergo/lib/types"
 
 	otelgotracer "github.com/wasilak/otelgo/tracing"
 	"github.com/wasilak/profilego"
@@ -81,9 +83,9 @@ func main() {
 		}
 	}
 
-	loggerConfig := loggergo.Config{
-		Level:  loggergo.LogLevelFromString(viper.GetString("log.level")),
-		Format: loggergo.LogFormatFromString(viper.GetString("log.format")),
+	loggerConfig := loggergoTypes.Config{
+		Level:  loggergoLib.LogLevelFromString(viper.GetString("log.level")),
+		Format: loggergoLib.LogFormatFromString(viper.GetString("log.format")),
 	}
 
 	if viper.GetBool("otel.enabled") {
@@ -92,7 +94,7 @@ func main() {
 		loggerConfig.OtelTracingEnabled = true
 	}
 
-	_, err := loggergo.LoggerInit(ctx, loggerConfig)
+	ctx, _, err := loggergo.Init(ctx, loggerConfig)
 	if err != nil {
 		slog.ErrorContext(ctx, err.Error())
 		os.Exit(1)
