@@ -11,7 +11,7 @@ require (
 	github.com/labstack/gommon v0.4.2
 	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/samber/slog-echo v1.15.1
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.19.0
 	github.com/wasilak/loggergo v1.7.3
 	github.com/wasilak/otelgo v1.2.3
