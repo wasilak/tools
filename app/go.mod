@@ -14,7 +14,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/samber/slog-echo v1.16.1
 	github.com/spf13/pflag v1.0.6
-	github.com/spf13/viper v1.20.0
+	github.com/spf13/viper v1.20.1
 	github.com/wasilak/loggergo v1.7.4
 	github.com/wasilak/otelgo v1.2.4
 	github.com/wasilak/profilego v1.0.9
