@@ -120,7 +120,9 @@ func main() {
 	e := echo.New()
 
 	if viper.GetBool("otel.enabled") {
-		e.Use(otelecho.Middleware(os.Getenv("OTEL_SERVICE_NAME")))
+		e.Use(otelecho.Middleware(os.Getenv("OTEL_SERVICE_NAME"), otelecho.WithSkipper(func(c echo.Context) bool {
+			return strings.Contains(c.Path(), "/assets") || strings.Contains(c.Path(), "health") || strings.Contains(c.Path(), "metrics")
+		})))
 	}
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
@@ -133,7 +135,7 @@ func main() {
 
 	e.HideBanner = true
 
-	if strings.EqualFold(viper.GetString("log.level"), "debug") {
+	if loggergoLib.LogLevelFromString(viper.GetString("log.level")) == slog.LevelDebug {
 		e.Logger.SetLevel(log.DEBUG)
 		e.Debug = true
 	}
