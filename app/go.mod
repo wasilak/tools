@@ -7,7 +7,7 @@ toolchain go1.24.2
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/sessions v1.4.0
-	github.com/grafana/pyroscope-go v1.2.1
+	github.com/grafana/pyroscope-go v1.2.2
 	github.com/labstack/echo-contrib v0.17.3
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/labstack/gommon v0.4.2
