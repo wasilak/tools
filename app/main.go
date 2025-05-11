@@ -23,9 +23,6 @@ import (
 
 	slogecho "github.com/samber/slog-echo"
 	"github.com/wasilak/loggergo"
-	loggergoLib "github.com/wasilak/loggergo/lib"
-	loggergoTypes "github.com/wasilak/loggergo/lib/types"
-
 	otelgotracer "github.com/wasilak/otelgo/tracing"
 	"github.com/wasilak/profilego"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
@@ -83,9 +80,9 @@ func main() {
 		}
 	}
 
-	loggerConfig := loggergoTypes.Config{
-		Level:  loggergoLib.LogLevelFromString(viper.GetString("log.level")),
-		Format: loggergoLib.LogFormatFromString(viper.GetString("log.format")),
+	loggerConfig := loggergo.Config{
+		Level:  loggergo.Types.LogLevelFromString(viper.GetString("log.level")),
+		Format: loggergo.Types.LogFormatFromString(viper.GetString("log.format")),
 	}
 
 	if viper.GetBool("otel.enabled") {
@@ -135,7 +132,7 @@ func main() {
 
 	e.HideBanner = true
 
-	if loggergoLib.LogLevelFromString(viper.GetString("log.level")) == slog.LevelDebug {
+	if loggergo.Types.LogLevelFromString(viper.GetString("log.level")) == slog.LevelDebug {
 		e.Logger.SetLevel(log.DEBUG)
 		e.Debug = true
 	}
