@@ -18,7 +18,7 @@ require (
 	github.com/wasilak/loggergo v1.7.8
 	github.com/wasilak/otelgo v1.2.6
 	github.com/wasilak/profilego v1.0.9
-	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.60.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.61.0
 	go.opentelemetry.io/otel v1.36.0
 	go.opentelemetry.io/otel/trace v1.36.0
 )
