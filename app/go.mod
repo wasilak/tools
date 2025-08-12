@@ -2,7 +2,7 @@ module github.com/wasilak/tools
 
 go 1.24
 
-toolchain go1.24.6
+toolchain go1.25.0
 
 require (
 	github.com/ghodss/yaml v1.0.0
