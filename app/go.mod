@@ -7,7 +7,7 @@ toolchain go1.25.0
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/sessions v1.4.0
-	github.com/grafana/pyroscope-go v1.2.4
+	github.com/grafana/pyroscope-go v1.2.7
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/labstack/gommon v0.4.2
@@ -38,7 +38,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/grafana/pyroscope-go/godeltaprof v0.1.8 // indirect
+	github.com/grafana/pyroscope-go/godeltaprof v0.1.9 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/lmittmann/tint v1.1.0 // indirect
