@@ -220,6 +220,8 @@ github.com/wasilak/profilego v1.0.9 h1:I7i+UqBa/kxF+edEptEJpDU4rGQvZoGWkgUME0EEa
 github.com/wasilak/profilego v1.0.9/go.mod h1:pcEwOzZCjmC1/5q5qTk2pyCpf9XWb2HnJpxUHIvW0pI=
 github.com/wasilak/profilego v1.1.0 h1:/gohQ+uRjUskMNF2aCAcIo3u8g+s6oiZGC0ZKNCTw+I=
 github.com/wasilak/profilego v1.1.0/go.mod h1:HZt3WPPdlwcb5vtYjOCL600ld9kAPWHUWXBAQrTppRk=
+github.com/wasilak/profilego v1.2.0 h1:UBrJGX1RarcvQl847Vh2jO/khBKixbJFDjM7mqvUaLo=
+github.com/wasilak/profilego v1.2.0/go.mod h1:HZt3WPPdlwcb5vtYjOCL600ld9kAPWHUWXBAQrTppRk=
 github.com/xybor-x/enum v1.4.0 h1:Bcv9amQlSsz+EDJW9feiDxCzzUkP1Bv2Lzwx1BGvGeU=
 github.com/xybor-x/enum v1.4.0/go.mod h1:cBN02xug2E1c3UJjZsF5eBg71usBXxX2ePFUFNOFs9o=
 github.com/yusufpapurcu/wmi v1.2.4 h1:zFUKzehAFReQwLys1b/iSMl+JQGSCSjtVqQn9bBrPo0=
