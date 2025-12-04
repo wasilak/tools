@@ -21,11 +21,15 @@ import (
 	"github.com/spf13/viper"
 	"github.com/wasilak/tools/libs"
 
+	otelpyroscope "github.com/grafana/otel-profiling-go"
 	slogecho "github.com/samber/slog-echo"
 	"github.com/wasilak/loggergo"
 	otelgotracer "github.com/wasilak/otelgo/tracing"
 	"github.com/wasilak/profilego"
+	"github.com/wasilak/profilego/config"
+	"github.com/wasilak/profilego/core"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
+	"go.opentelemetry.io/otel"
 )
 
 //go:embed views
@@ -73,11 +77,21 @@ func main() {
 			HostMetricsEnabled:    true,
 			RuntimeMetricsEnabled: true,
 		}
-		ctx, _, err := otelgotracer.Init(ctx, otelGoTracingConfig)
+		ctx, traceProvider, err := otelgotracer.Init(ctx, otelGoTracingConfig)
 		if err != nil {
 			slog.ErrorContext(ctx, err.Error())
 			os.Exit(1)
 		}
+
+		// 1. Wrap the standard provider with the Pyroscope OTel provider
+		pyroscopeTracerProvider := otelpyroscope.NewTracerProvider(
+			traceProvider,
+			otelpyroscope.WithAppName("my.go.service.otel"),
+			otelpyroscope.WithPyroscopeURL("http://pyroscope-server:4040"),
+		)
+
+		// 2. Register the wrapped provider globally
+		otel.SetTracerProvider(pyroscopeTracerProvider)
 	}
 
 	loggerConfig := loggergo.Config{
@@ -98,18 +112,16 @@ func main() {
 	}
 
 	if viper.GetBool("profiling.enabled") {
-		ProfileGoConfig := profilego.Config{
+		profileGoConfig := config.Config{
 			ApplicationName: libs.GetAppName(),
 			ServerAddress:   viper.GetString("profiling.ServerAddress"),
-			Tags: map[string]string{
-				"hostname": os.Getenv("HOSTNAME"),
-				"test":     "test_value",
-			},
+			Backend:         core.PyroscopeBackend,
+			InitialState:    core.ProfilingEnabled,
 		}
 
-		err := profilego.Init(ProfileGoConfig)
+		err := profilego.InitWithConfig(profileGoConfig)
 		if err != nil {
-			slog.ErrorContext(ctx, err.Error())
+			slog.ErrorContext(ctx, "Failed to initialize profiling: %v", "error", err)
 			os.Exit(1)
 		}
 	}
@@ -117,7 +129,7 @@ func main() {
 	e := echo.New()
 
 	if viper.GetBool("otel.enabled") {
-		e.Use(otelecho.Middleware(os.Getenv("OTEL_SERVICE_NAME"), otelecho.WithSkipper(func(c echo.Context) bool {
+		e.Use(otelecho.Middleware(libs.GetAppName(), otelecho.WithSkipper(func(c echo.Context) bool {
 			return strings.Contains(c.Path(), "/assets") || strings.Contains(c.Path(), "health") || strings.Contains(c.Path(), "metrics")
 		})))
 	}
