@@ -8,7 +8,7 @@ require (
 	github.com/grafana/otel-profiling-go v0.5.1
 	github.com/grafana/pyroscope-go v1.2.7
 	github.com/labstack/echo-contrib v0.17.4
-	github.com/labstack/echo/v4 v4.14.0
+	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
 	github.com/pelletier/go-toml/v2 v2.2.4
 	github.com/samber/slog-echo v1.18.0
