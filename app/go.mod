@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/grafana/otel-profiling-go v0.5.1
 	github.com/grafana/pyroscope-go v1.2.7
-	github.com/labstack/echo-contrib v0.17.4
+	github.com/labstack/echo-contrib v0.50.0
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/echo/v5 v5.0.3
 	github.com/labstack/gommon v0.4.2
