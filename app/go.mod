@@ -9,7 +9,7 @@ require (
 	github.com/grafana/pyroscope-go v1.2.8
 	github.com/labstack/echo-contrib v0.50.1
 	github.com/labstack/echo/v4 v4.15.2
-	github.com/labstack/echo/v5 v5.1.0
+	github.com/labstack/echo/v5 v5.1.1
 	github.com/labstack/gommon v0.5.0
 	github.com/pelletier/go-toml/v2 v2.3.0
 	github.com/samber/slog-echo v1.22.0
