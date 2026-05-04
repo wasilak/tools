@@ -13,6 +13,7 @@ require (
 	github.com/labstack/gommon v0.5.0
 	github.com/pelletier/go-toml/v2 v2.3.1
 	github.com/samber/slog-echo v1.23.0
+	github.com/samber/slog-echo/v2 v2.0.0
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.21.0
 	github.com/wasilak/loggergo v1.8.2
