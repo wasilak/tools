@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/sessions v1.4.0
-	github.com/grafana/otel-profiling-go v0.6.0
+	github.com/grafana/otel-profiling-go v0.7.0
 	github.com/grafana/pyroscope-go v1.4.3
 	github.com/labstack/echo-contrib v0.50.1
 	github.com/labstack/echo/v4 v4.16.0
